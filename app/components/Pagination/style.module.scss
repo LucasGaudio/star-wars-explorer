@@ -77,6 +77,8 @@
   .pagination {
     gap: $spacing-xs;
     margin: $spacing-lg 0;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .button {
@@ -87,11 +89,46 @@
   }
 
   .prevNext {
-    padding: $spacing-xs $spacing-md;
+    padding: $spacing-xs $spacing-sm;
     font-size: $font-size-sm;
+    min-width: auto;
+    flex-shrink: 0;
   }
 
   .pageNumbers {
     gap: 2px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    gap: 4px;
+    margin: $spacing-md 0;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button {
+    padding: 6px 8px;
+    font-size: $font-size-xs;
+    min-width: 30px;
+    height: 30px;
+  }
+
+  .prevNext {
+    padding: 6px 12px;
+    font-size: $font-size-xs;
+    width: auto;
+    margin: 4px 0;
+  }
+
+  .pageNumbers {
+    gap: 2px;
+    margin: 8px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
   }
 }

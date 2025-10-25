@@ -68,3 +68,49 @@
     transform: scale(0.95);
   }
 }
+
+// Mobile responsive styles
+@media (max-width: 768px) {
+  .searchForm {
+    max-width: 80%;
+    padding: $spacing-xs;
+    margin: 0 $spacing-sm;
+  }
+  
+  .searchInput {
+    font-size: $font-size-sm;
+    padding: $spacing-xs;
+  }
+  
+  .clearButton {
+    font-size: $font-size-base;
+    padding: $spacing-xs;
+  }
+  
+  .searchButton {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchForm {
+    margin: 0 $spacing-xs;
+    padding: 4px;
+  }
+  
+  .searchInput {
+    font-size: $font-size-xs;
+    padding: 4px;
+  }
+  
+  .clearButton {
+    font-size: $font-size-sm;
+    padding: 4px;
+  }
+  
+  .searchButton {
+    padding: 4px $spacing-xs;
+    font-size: $font-size-xs;
+  }
+}
