@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface Planet {
   name: string;
@@ -33,21 +34,33 @@ interface PlanetsState {
   setAllSearchResults: (results: Planet[]) => void;
 }
 
-export const usePlanetsStore = create<PlanetsState>((set) => ({
-  planets: [],
-  setPlanets: (planets) => set({ planets }),
-  selectedPlanet: null,
-  setSelectedPlanet: (planet) => set({ selectedPlanet: planet }),
-  currentPage: 1,
-  setCurrentPage: (page) => set({ currentPage: page }),
-  totalPages: 1,
-  setTotalPages: (pages) => set({ totalPages: pages }),
-  isLoading: false,
-  setIsLoading: (loading) => set({ isLoading: loading }),
-  searchQuery: "",
-  setSearchQuery: (query) => set({ searchQuery: query }),
-  isSearchMode: false,
-  setIsSearchMode: (isSearch) => set({ isSearchMode: isSearch }),
-  allSearchResults: [],
-  setAllSearchResults: (results) => set({ allSearchResults: results }),
-}));
+export const usePlanetsStore = create<PlanetsState>()(
+  persist(
+    (set) => ({
+      planets: [],
+      selectedPlanet: null,
+      currentPage: 1,
+      totalPages: 0,
+      isLoading: false,
+      searchQuery: "",
+      isSearchMode: false,
+      allSearchResults: [],
+
+      setPlanets: (planets) => set({ planets }),
+      setSelectedPlanet: (planet) => set({ selectedPlanet: planet }),
+      setCurrentPage: (page) => set({ currentPage: page }),
+      setTotalPages: (total) => set({ totalPages: total }),
+      setIsLoading: (loading) => set({ isLoading: loading }),
+      setSearchQuery: (query) => set({ searchQuery: query }),
+      setIsSearchMode: (mode) => set({ isSearchMode: mode }),
+      setAllSearchResults: (results) => set({ allSearchResults: results }),
+    }),
+    {
+      name: "swapi-store",
+      partialize: (state) => ({
+        selectedPlanet: state.selectedPlanet,
+        planets: state.planets,
+      }),
+    }
+  )
+);
