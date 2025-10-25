@@ -1,0 +1,97 @@
+@import '../../design-tokens.scss';
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  margin: $spacing-xl 0;
+  flex-wrap: wrap;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-md;
+  background: transparent;
+  color: $text-primary;
+  border: 2px solid $secondary-color;
+  border-radius: $border-radius-md;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-base;
+  transition: all $transition-normal;
+  cursor: pointer;
+  min-width: 40px;
+  height: 40px;
+
+  &:hover:not(:disabled) {
+    background: $secondary-color;
+    color: $text-primary;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.prevNext {
+  padding: $spacing-sm $spacing-lg;
+  min-width: auto;
+}
+
+.pageNumbers {
+  display: flex;
+  gap: $spacing-xs;
+  align-items: center;
+}
+
+.pageNumber {
+  &.active {
+    background: $primary-color;
+    border-color: $primary-color;
+    color: $text-primary;
+    
+    &:hover {
+      background: $primary-color;
+      opacity: 0.9;
+    }
+  }
+
+  &.dots {
+    border: none;
+    cursor: default;
+    
+    &:hover {
+      background: transparent;
+      transform: none;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .pagination {
+    gap: $spacing-xs;
+    margin: $spacing-lg 0;
+  }
+
+  .button {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+    min-width: 35px;
+    height: 35px;
+  }
+
+  .prevNext {
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-sm;
+  }
+
+  .pageNumbers {
+    gap: 2px;
+  }
+}

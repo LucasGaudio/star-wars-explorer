@@ -1,0 +1,174 @@
+@import './design-tokens.scss';
+
+// Simple and clean SW Explorer styles
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+  background: $background-dark;
+  color: $text-primary;
+  text-align: center;
+}
+
+.header {
+  margin-bottom: $spacing-xl;
+}
+
+.title {
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  margin: 0 0 $spacing-sm 0;
+  color: $primary-color;
+}
+
+.subtitle {
+  font-size: $font-size-xl;
+  margin: 0;
+  color: $text-secondary;
+  font-weight: $font-weight-light;
+}
+
+.searchStatus {
+  margin: $spacing-md 0;
+  padding: $spacing-sm $spacing-md;
+  background: rgba($primary-color, 0.1);
+  border-radius: $border-radius-md;
+  border: 1px solid rgba($primary-color, 0.3);
+  
+  p {
+    margin: $spacing-xs 0;
+    color: $text-secondary;
+    font-size: $font-size-base;
+  }
+  
+  strong {
+    color: $primary-color;
+  }
+}
+
+.resultCount {
+  font-size: $font-size-sm !important;
+  color: $text-muted !important;
+  font-style: italic;
+}
+
+.searching {
+  color: $primary-color !important;
+  font-weight: $font-weight-semibold;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.button {
+  display: inline-block;
+  padding: $spacing-sm $spacing-lg;
+  background: $primary-color;
+  color: $text-primary;
+  border-radius: $border-radius-md;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-lg;
+  transition: all $transition-normal;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}
+
+.buttonOutline {
+  display: inline-block;
+  padding: $spacing-sm $spacing-lg;
+  background: transparent;
+  color: $text-primary;
+  border: 2px solid $secondary-color;
+  border-radius: $border-radius-md;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-lg;
+  transition: all $transition-normal;
+  cursor: pointer;
+
+  &:hover {
+    background: $secondary-color;
+    color: $text-primary;
+  }
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-lg;
+  width: 50%;
+  max-width: 1200px;
+  height: 100%;
+  margin: $spacing-xl 0;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+  
+  p {
+    color: $text-secondary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-light;
+    margin: 0;
+  }
+}
+
+.footer {
+  margin-top: auto;
+  
+  small {
+    color: $text-muted;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-light;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .container {
+    padding: $spacing-sm;
+  }
+  
+  .actions {
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+  
+  .button,
+  .buttonOutline {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+    margin: $spacing-lg 0;
+  }
+}

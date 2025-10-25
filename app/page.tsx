@@ -1,65 +1,173 @@
-import Image from "next/image";
+"use client";
+import styles from "./page.module.scss";
+import Link from "next/link";
+import SearchField from "./components/SearchField";
+import Card from "./components/Card";
+import Pagination from "./components/Pagination";
+import { useEffect } from "react";
+import { usePlanetsStore } from "@/app/store/usePlanetStore";
+import { fetchPlanets, searchPlanets, enrichPlanetsWithDetails } from "@/app/services/swapi"
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+  const { 
+    planets, 
+    setPlanets, 
+    setSelectedPlanet, 
+    currentPage, 
+    setCurrentPage, 
+    totalPages, 
+    setTotalPages, 
+    isLoading, 
+    setIsLoading,
+    searchQuery,
+    setSearchQuery,
+    isSearchMode,
+    setIsSearchMode,
+    allSearchResults,
+    setAllSearchResults
+  } = usePlanetsStore();
+
+    const handleSearch = async (query: string) => {
+        if (!query.trim()) {
+            // If search query is empty, return to normal pagination mode
+            setIsSearchMode(false);
+            setSearchQuery("");
+            setAllSearchResults([]);
+            loadPlanets(currentPage);
+            return;
+        }
+
+        setIsLoading(true);
+        setSearchQuery(query);
+        setIsSearchMode(true);
+        
+        try {
+            const data = await searchPlanets(query);
+            const enriched = await enrichPlanetsWithDetails(data);
+
+            // Filter results to only include planets that start with the query (case-insensitive)
+            const filteredResults = enriched.results.filter((planet: any) => 
+                planet.name.toLowerCase().startsWith(query.toLowerCase())
+            );
+            
+            // Store all filtered results for pagination
+            setAllSearchResults(filteredResults);
+            
+            // Show first page of results
+            const itemsPerPage = 10;
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageResults = filteredResults.slice(startIndex, endIndex);
+            
+            setPlanets(pageResults);
+            setTotalPages(Math.ceil(filteredResults.length / itemsPerPage));
+            
+            // Reset to first page if we're starting a new search
+            if (currentPage !== 1) {
+                setCurrentPage(1);
+            }
+        } catch (error) {
+            console.error("Error searching planets:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleClearSearch = () => {
+        setIsSearchMode(false);
+        setSearchQuery("");
+        setAllSearchResults([]);
+        loadPlanets(currentPage);
+    };
+
+    const loadPlanets = async (page: number) => {
+        setIsLoading(true);
+        try {
+            const data = await fetchPlanets(page);
+            const enriched = await enrichPlanetsWithDetails(data);
+            setPlanets(enriched.results);
+            setTotalPages(Math.ceil(data.count / 10)); // SWAPI returns 10 items per page
+        } catch (error) {
+            console.error("Error loading planets:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        if (isSearchMode) {
+            // For search mode, paginate through stored results
+            const itemsPerPage = 10;
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageResults = allSearchResults.slice(startIndex, endIndex);
+            setPlanets(pageResults);
+        } else {
+            loadPlanets(page);
+        }
+    };
+
+    useEffect(() => {
+        loadPlanets(currentPage);
+    }, []);
+
+   
+    return (
+        <main className={styles.container}>
+            <header className={styles.header}>
+                <h1 className={styles.title}>SW Explorer</h1>
+                <p className={styles.subtitle}>Welcome to{" "}
+                    <span style={{ color: "#ffd700", fontWeight: 600 }}>Star Wars Explorer</span>
+                    ! Choose or search a planet below that <br />
+                    you want to see and learn more about this galaxy far, far away.
+                </p>
+            </header>
+
+            <SearchField 
+                placeholder="Search for planets..." 
+                onSearch={handleSearch}
+                value={searchQuery}
+                onClear={handleClearSearch}
+                isSearching={isLoading && isSearchMode}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+            
+            {isSearchMode && (
+                <div className={styles.searchStatus}>
+                    <p className={styles.resultCount}>
+                        {isLoading ? (
+                            <span className={styles.searching}>Searching...</span>
+                        ) : (
+                            `${allSearchResults.length} planet${allSearchResults.length !== 1 ? 's' : ''} found`
+                        )}
+                    </p>
+                </div>
+            )}
+            
+            {isLoading ? (
+                <div className={styles.loading}>
+                    <p>Loading planets...</p>
+                </div>
+            ) : (
+                <>
+                    <div className={styles.cardsGrid}>
+                        {planets.map((cardData) => (
+                            <Link key={cardData.name} style={{ textDecoration: 'none', color: 'inherit'}} onClick={() => setSelectedPlanet(cardData)} href={`/planets/${encodeURIComponent(cardData.name.toLowerCase())}`}>
+                                <Card data={cardData} />
+                            </Link>
+                        ))}
+                    </div>
+
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        isLoading={isLoading}
+                    />
+                </>
+            )}
+
+            <footer className={styles.footer}/>
+        </main>
+    );
 }
