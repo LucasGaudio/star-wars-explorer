@@ -108,10 +108,10 @@
   margin-bottom: $spacing-lg;
   
   @media (max-width: 768px) {
-    flex-direction: column;
-    border-bottom: none;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     margin-bottom: $spacing-md;
-    gap: 0;
   }
   
   @media (max-width: 480px) {
@@ -154,31 +154,27 @@
   }
   
   @media (max-width: 768px) {
-    text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    border-bottom: none;
     margin-bottom: 0;
     padding: $spacing-sm $spacing-md;
     font-size: $font-size-sm;
-    
-    &:last-child {
-      border-bottom: none;
-    }
+    min-width: 100px;
     
     &.active::after {
-      height: 0;
-      width: 2px;
-      height: 100%;
-      left: 0;
-      right: auto;
-      top: 0;
-      bottom: auto;
-      border-radius: 0;
+      height: 2px;
+      width: auto;
+      top: auto;
+      bottom: -1px;
+      right: 0;
+      border-radius: 1px 1px 0 0;
     }
   }
   
   @media (max-width: 480px) {
     padding: $spacing-xs $spacing-sm;
     font-size: $font-size-xs;
+    min-width: 80px;
   }
 }
 
@@ -191,7 +187,6 @@
   }
 }
 
-// Tab content styles - Material-UI inspired
 .infoGrid {
   display: grid;
   gap: $spacing-sm;
@@ -374,7 +369,6 @@
   font-size: $font-size-sm;
 }
 
-// Loading and empty states
 .loadingState {
   display: flex;
   justify-content: center;
@@ -393,7 +387,6 @@
   border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
-// Animations
 @keyframes fadeInUp {
   from {
     opacity: 0;

@@ -34,7 +34,6 @@ const Card: React.FC<CardProps> = ({ data, className = "", variant = "default" }
       return str.charAt(0).toUpperCase() + str.slice(1);
     };
 
-  // If it's a SWAPI planet, convert it to CardData
   if ("terrain" in data && "climate" in data && "diameter" in data) {
     parsedData = {
       title: data.name,
@@ -67,7 +66,9 @@ const Card: React.FC<CardProps> = ({ data, className = "", variant = "default" }
             {Object.entries(metadata).map(([key, value]) => (
               <div key={key} className={styles.metadataItem}>
                 <span className={styles.metadataKey}>{key}:</span>
+                <span className={styles.metadataValue}>
                   {Array.isArray(value) ? value.join(", ") : String(value)}
+                </span>
               </div>
             ))}
           </div>

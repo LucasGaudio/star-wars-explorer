@@ -13,12 +13,10 @@ interface SearchFieldProps {
 const SearchField: React.FC<SearchFieldProps> = ({ placeholder = "Buscar...", onSearch, value = "", onClear, isSearching = false }) => {
   const [query, setQuery] = useState(value);
 
-  // Update local state when value prop changes
   useEffect(() => {
     setQuery(value);
   }, [value]);
 
-  // Debounced search function
   const debouncedSearch = useCallback(
     (() => {
       let timeoutId: NodeJS.Timeout;
@@ -26,7 +24,7 @@ const SearchField: React.FC<SearchFieldProps> = ({ placeholder = "Buscar...", on
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
           if (onSearch) onSearch(searchQuery.trim());
-        }, 300); // 300ms delay
+        }, 300);
       };
     })(),
     [onSearch]
@@ -36,7 +34,6 @@ const SearchField: React.FC<SearchFieldProps> = ({ placeholder = "Buscar...", on
     const newQuery = e.target.value;
     setQuery(newQuery);
     
-    // Trigger search as user types
     debouncedSearch(newQuery);
   };
 

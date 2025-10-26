@@ -1,7 +1,7 @@
 @use "../../design-tokens.scss" as *;
 
 .card {
-  min-height: 280px;
+  min-height: 270px;
   background-color: $background-dark;
   border-radius: $border-radius-lg;
   border: 1px solid $text-muted;
@@ -87,9 +87,9 @@
   color: $text-secondary;
   font-weight: $font-weight-normal;
   text-decoration: none;
+  max-width: 70%;
 }
 
-// Variants
 .compact {
   .imageContainer {
     height: 120px;
@@ -156,7 +156,6 @@
   }
 }
 
-// Mobile responsive styles
 @media (max-width: 768px) {
   .card {
     height: auto;

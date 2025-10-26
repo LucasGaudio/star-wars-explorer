@@ -1,6 +1,5 @@
 @import './design-tokens.scss';
 
-// Simple and clean SW Explorer styles
 .container {
   min-height: 100vh;
   display: flex;
@@ -15,20 +14,84 @@
 
 .header {
   margin-bottom: $spacing-xl;
+  position: relative;
+  padding-bottom: $spacing-md;
+  animation: fadeInUp 0.8s ease-out;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50vw;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, $primary-color, transparent);
+    border-radius: 2px;
+    animation: expandLine 1s ease-out 0.5s both;
+    box-shadow: 0 0 20px rgba($primary-color, 0.5);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandLine {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 50vw;
+    opacity: 1;
+  }
 }
 
 .title {
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
-  margin: 0 0 $spacing-sm 0;
+  margin: 0 0 $spacing-lg 0;
   color: $primary-color;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, $primary-color 0%, rgba($primary-color, 0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  @supports not (-webkit-background-clip: text) {
+    -webkit-text-fill-color: $primary-color;
+  }
 }
 
 .subtitle {
-  font-size: $font-size-xl;
+  font-size: $font-size-lg;
   margin: 0;
   color: $text-secondary;
   font-weight: $font-weight-light;
+  line-height: 1.7;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  span {
+    background: linear-gradient(135deg, $primary-color 0%, lighten($primary-color, 20%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: $font-weight-semibold;
+    
+    @supports not (-webkit-background-clip: text) {
+      -webkit-text-fill-color: $primary-color;
+    }
+  }
 }
 
 .searchStatus {
@@ -148,10 +211,8 @@
   }
 }
 
-// Responsive
 @media (max-width: 768px) {
   .container {
-    padding: $spacing-sm;
     min-height: 100vh;
   }
   
@@ -161,12 +222,12 @@
   
   .title {
     font-size: $font-size-3xl;
-    margin-bottom: $spacing-sm;
+    margin-bottom: $spacing-md;
   }
   
   .subtitle {
-    font-size: $font-size-lg;
-    line-height: 1.4;
+    font-size: $font-size-base;
+    line-height: 1.6;
   }
   
   .searchStatus {
@@ -211,16 +272,15 @@
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: $spacing-xs;
-  }
   
   .title {
     font-size: $font-size-2xl;
+    letter-spacing: 0.03em;
   }
   
   .subtitle {
-    font-size: $font-size-base;
+    font-size: $font-size-sm;
+    line-height: 1.5;
   }
   
   .cardsGrid {

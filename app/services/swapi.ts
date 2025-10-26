@@ -39,7 +39,6 @@ export async function enrichPlanetsWithDetails(data: any) {
     residentUrls.size ? fetchMultiple([...residentUrls]) : [],
   ]);
 
-  // collect species and vehicles from residents
   const speciesUrls = new Set<string>();
   const vehicleUrls = new Set<string>();
 
@@ -48,25 +47,22 @@ export async function enrichPlanetsWithDetails(data: any) {
     (r.vehicles || []).forEach((url: string) => vehicleUrls.add(url));
   }
 
-  // fetch species and vehicles
   const [species, vehicles] = await Promise.all([
     speciesUrls.size ? fetchMultiple([...speciesUrls]) : [],
     vehicleUrls.size ? fetchMultiple([...vehicleUrls]) : [],
   ]);
 
-  // build maps
   const urlToFilmTitle = new Map(films.map((f: any) => [f.url, f.title]));
   const urlToSpecies = new Map(species.map((s: any) => [s.url, { name: s.name }]));
   const urlToVehicle = new Map(
     vehicles.map((v: any) => [v.url, { name: v.name, model: v.model }])
   );
 
-  // rebuild enriched residents
   const enrichedResidents = residents.map((r: any) => {
     const resolvedSpecies =
       r?.species && r?.species.length > 0
         ? r.species.map((url: string) => urlToSpecies.get(url) || { name: "Unknown" })
-        : [{ name: "Human" }]; // default assumption
+        : [{ name: "Human" }];
 
     const resolvedVehicles =
       r.vehicles && r.vehicles.length > 0

@@ -20,8 +20,6 @@ export default function PlanetDetailsPage() {
   const [activeTab, setActiveTab] = useState<TabType>("info");
   const router = useRouter();
 
-  console.log("Selected Planet in Detail Page:", selectedPlanet);
-
   const handleGoBack = () => {
     router.back();
   };
@@ -31,7 +29,6 @@ export default function PlanetDetailsPage() {
       return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
-  // Handle loading state
   if (!selectedPlanet || !selectedPlanet.name) {
     return (
       <main className={styles.planetDetailPage}>
@@ -42,7 +39,6 @@ export default function PlanetDetailsPage() {
     );
   }
 
-  // Format population number
   const formatPopulation = (population: string) => {
     if (population === "unknown") return "Unknown";
     const num = parseInt(population);
@@ -50,7 +46,6 @@ export default function PlanetDetailsPage() {
     return num.toLocaleString("pt-BR");
   };
 
-  // Format diameter
   const formatDiameter = (diameter: string) => {
     if (diameter === "unknown") return "Unknown";
     const num = parseInt(diameter);
