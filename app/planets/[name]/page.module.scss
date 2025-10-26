@@ -75,6 +75,11 @@
   &:hover .arrowIcon {
     transform: translateX(-2px);
   }
+
+    @media (max-width: 768px) {
+    width: 35px;
+    height: 35px;
+  }
 }
 
 .planetName {

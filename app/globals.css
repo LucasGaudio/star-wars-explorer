@@ -36,10 +36,4 @@ body {
   * {
     -webkit-tap-highlight-color: transparent;
   }
-  
-  /* Ensure proper touch targets */
-  button, a, input, select, textarea {
-    min-height: 44px;
-    min-width: 44px;
-  }
 }
